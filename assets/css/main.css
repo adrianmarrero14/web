@@ -1259,7 +1259,7 @@ p {
 .about-section .about-content ul li {
   padding-left: 40px;
   font-size: 20px;
-  font-weight: 600;
+  /* font-weight: 600; */
   color: #162447;
   margin-bottom: 25px;
   position: relative;
@@ -1458,6 +1458,10 @@ p {
   .footer .widget-wrapper .footer-widget .desc {
     padding-right: 50px;
   }
+}
+
+.shape-responsive {
+  right: 20px !important;
 }
 
 .footer .widget-wrapper .footer-widget .socials {
