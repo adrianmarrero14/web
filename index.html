@@ -46,9 +46,30 @@
           <div class="row align-items-center">
             <div class="col-lg-12">
               <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand" href="index.html">
+                <div
+                  class="collapse navbar-collapse sub-menu-bar"
+                  id="navbarSupportedContent"
+                >
+                  <ul id="nav" class="navbar-nav">
+                    <li class="nav-item">
+                      <a class="page-scroll active" href="#home">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="page-scroll" href="#features">Experiencia</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                      <a class="page-scroll" href="#about">About</a>
+                    </li> -->
+
+                    <li class="nav-item">
+                      <a class="page-scroll" href="#why">Otras</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- <a class="navbar-brand" href="index.html">
                   <img src="assets/img/logo/logo.svg" alt="Logo" />
-                </a>
+                </a> -->
                 <button
                   class="navbar-toggler"
                   type="button"
@@ -63,26 +84,7 @@
                   <span class="toggler-icon"></span>
                 </button>
 
-                <div
-                  class="collapse navbar-collapse sub-menu-bar"
-                  id="navbarSupportedContent"
-                >
-                  <ul id="nav" class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                      <a class="page-scroll active" href="#home">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="page-scroll" href="#features">Experiencia</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                      <a class="page-scroll" href="#about">About</a>
-                    </li> -->
 
-                    <li class="nav-item">
-                      <a class="page-scroll" href="#why">Otros</a>
-                    </li>
-                  </ul>
-                </div>
                 <!-- navbar collapse -->
               </nav>
               <!-- navbar -->
@@ -103,7 +105,7 @@
           <div class="col-lg-6">
             <div class="hero-content">
               <h1 class="wow fadeInUp" data-wow-delay=".4s">
-                Hola! Soy Adrián Marrero
+                Soy Adrián Marrero!
               </h1>
               <p class="wow fadeInUp" data-wow-delay=".6s">
                 4+ años de experiencia como <strong>Desarrollador Full Stack.</strong>
@@ -471,9 +473,7 @@
                   </a>
                 </div> -->
                 <p class="desc mb-30 text-white">
-                  Puedes seguirme en otras redes. Estaré encantado de conversar contigo. 
-                  <br><br>
-                  adrianmarrero18@gmail.com
+                  Puedes seguirme en otras redes. Estaré encantado de conversar contigo.
                 </p>
                 <ul class="socials">
                   <li>
@@ -492,7 +492,10 @@
                     </a>
                   </li>
                   <li>
-                    <a href="jvascript:void(0)" target="_blank">
+                    <a 
+                      href="copy:adrianmarrero18@gmail.com" 
+                      onclick="copyToClipboard('adrianmarrero18@gmail.com')" 
+                    >
                       <i class="lni lni-google"></i>
                     </a>
                   </li>
@@ -528,9 +531,9 @@
               <div class="footer-widget">
                 <h3>About Us</h3>
                 <ul class="links">
-                  <li><a href="javascript:void(0)">Inicio</a></li>
-                  <li><a href="javascript:void(0)">Experiencia</a></li>
-                  <li><a href="javascript:void(0)">Otras</a></li>
+                  <li><a  href="#home">Inicio</a></li>
+                  <li><a  href="#features">Experiencia</a></li>
+                  <li><a  href="#why">Otras</a></li>
                   <!-- <li><a href="javascript:void(0)">Testimonials</a></li> -->
                 </ul>
               </div>
@@ -567,5 +570,11 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
+
+    <script>
+      function copyToClipboard(text) {
+        navigator.clipboard.writeText(text);
+      }
+    </script>
   </body>
 </html>
