@@ -5,4 +5,4 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 npm run build
-rsync -avz --delete --chmod=D755,F644 dist/ hetzner:/srv/sites/adrianmarrero.com/
+rsync -avz --delete dist/ hetzner:/srv/sites/adrianmarrero.com/
