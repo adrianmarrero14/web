@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import Monogram from '../components/Monogram.astro';
+import { ui } from '../i18n/ui';
+
+// Served by Caddy for any missing path, so it speaks both languages.
+---
+
+<Base lang="en" title={`404 · ${ui.en['404.title']}`} description={ui.en['404.body']} alternates={false}>
+  <main class="page not-found">
+    <Monogram size="96px" cursor="blink" />
+    <p class="code mono"><span class="accent">404</span> · {ui.en['404.title']} / <span lang="es">{ui.es['404.title']}</span></p>
+    <p class="links mono">
+      <a href="/">{ui.en['404.back']}</a>
+      <a href="/es/" lang="es">{ui.es['404.back']}</a>
+    </p>
+  </main>
+</Base>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .code {
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 14px;
+  }
+</style>

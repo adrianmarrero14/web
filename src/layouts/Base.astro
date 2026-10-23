@@ -1,0 +1,59 @@
+---
+import '@fontsource-variable/archivo';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import profile from '../assets/profile.jpeg';
+import { languages, site, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Emit canonical and hreflang links. Off for pages that only exist as one file, like 404. */
+  alternates?: boolean;
+}
+
+const { lang, title, description, alternates = true } = Astro.props;
+const ogImage = await getImage({ src: profile, format: 'jpg', width: 400 });
+const ogImageUrl = new URL(ogImage.src, Astro.site);
+const locales = Object.keys(languages) as Lang[];
+const ogLocale = { en: 'en_US', es: 'es_ES' }[lang];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {
+      alternates && (
+        <>
+          <link rel="canonical" href={getAbsoluteLocaleUrl(lang, '')} />
+          {locales.map((l) => (
+            <link rel="alternate" hreflang={l} href={getAbsoluteLocaleUrl(l, '')} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('en', '')} />
+        </>
+      )
+    }
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

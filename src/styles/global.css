@@ -1,0 +1,114 @@
+/* Brand tokens (source: ../branding/Adrian Marrero - Brand.dc.html).
+   Five grays and one accent. The accent never exceeds 5% of any surface. */
+:root {
+  --ink: #0a0a0a;
+  --charcoal: #1c1c1c;
+  --graphite: #5c5c5c;
+  --ash: #b3b3b3;
+  --paper: #f3f2f2;
+  --accent: #b8ff2e; /* Acid Green */
+
+  --color-bg: var(--ink);
+  --color-surface: var(--charcoal);
+  --color-text: var(--paper);
+  --color-muted: var(--ash);
+  --color-divider: color-mix(in srgb, var(--paper) 16%, transparent);
+
+  --font-heading: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --page-max: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --rule: 2px solid var(--color-divider);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--graphite);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 120ms ease, text-decoration-color 120ms ease;
+}
+
+a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}

@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import Home from '../components/Home.astro';
+import { useTranslations } from '../i18n/ui';
+
+const t = useTranslations('en');
+---
+
+<Base lang="en" title={t('meta.title')} description={t('meta.description')}>
+  <Home lang="en" />
+</Base>

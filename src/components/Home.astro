@@ -1,0 +1,282 @@
+---
+import { Image } from 'astro:assets';
+import profile from '../assets/profile.jpeg';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import Section from './Section.astro';
+import { site, stack, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="page">
+  <Header lang={lang} />
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="prompt mono"><span class="accent">$</span> whoami</p>
+        <h1>Adrián<br />Marrero</h1>
+        <p class="role">{t('hero.role')}</p>
+        <p class="lead">{t('hero.lead')}</p>
+      </div>
+      <div class="portrait">
+        <Image src={profile} alt={t('hero.portrait')} width={400} height={400} loading="eager" />
+        <span class="portrait-bar" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <Section id="about" index="01" title={t('about.title')} note={t('about.note')}>
+      <div class="prose">
+        <p>{t('about.p1')}</p>
+        <p>{t('about.p2')}</p>
+      </div>
+    </Section>
+
+    <Section id="stack" index="02" title={t('stack.title')} note={t('stack.note')}>
+      <dl class="stack">
+        {
+          stack.map(({ group, items }) => (
+            <div class="stack-cell">
+              <dt class="mono">{group[lang]}</dt>
+              <dd>
+                {items.map((item) => (
+                  <span>{typeof item === 'string' ? item : item[lang]}</span>
+                ))}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Section>
+
+    <Section id="studio" index="03" title={site.studio.name} note={t('studio.note')}>
+      <div class="prose">
+        <p>{t('studio.body')}</p>
+        <p>
+          <a class="arrow-link mono" href={site.studio.href}>{t('studio.link')} <span class="accent">→</span></a>
+        </p>
+      </div>
+    </Section>
+
+    <Section id="contact" index="04" title={t('contact.title')} note={t('contact.note')}>
+      <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+      <ul class="socials mono">
+        {
+          site.socials.map((s) => (
+            <li>
+              <a href={s.href} rel="me">
+                <span class="social-label">{s.label}</span>
+                <span class="social-handle">{s.handle}</span>
+                <span class="accent" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Section>
+  </main>
+
+  <Footer lang={lang} />
+</div>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 40px;
+    padding-top: clamp(48px, 8vw, 104px);
+    border-bottom: var(--rule);
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: clamp(48px, 7vw, 88px);
+  }
+
+  .prompt {
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  h1 {
+    font-size: clamp(56px, 11vw, 136px);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+  }
+
+  .role {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: clamp(18px, 2vw, 22px);
+    letter-spacing: -0.01em;
+  }
+
+  .lead {
+    max-width: 46ch;
+    font-size: 18px;
+    color: var(--color-muted);
+  }
+
+  .portrait {
+    position: relative;
+    justify-self: end;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .portrait img {
+    width: 100%;
+    filter: grayscale(1);
+    /* Fade the photo's edges into the page so its own black never shows as a box. */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, black 35%), linear-gradient(to bottom, transparent 0%, black 25%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent 0%, black 35%), linear-gradient(to bottom, transparent 0%, black 25%);
+    mask-composite: intersect;
+  }
+
+  .portrait-bar {
+    position: absolute;
+    left: 36%;
+    bottom: 24px;
+    width: 40px;
+    height: 6px;
+    background: var(--accent);
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 64ch;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .stack-cell {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: baseline;
+    gap: 8px 24px;
+    padding: 18px 20px;
+    background: var(--color-surface);
+  }
+
+  .stack dt {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+  }
+
+  .stack dd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.35;
+  }
+
+  .arrow-link {
+    font-size: 15px;
+  }
+
+  .email {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(24px, 4.6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+    box-shadow: inset 0 -0.08em 0 var(--accent);
+  }
+
+  .socials {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 32px 0 0;
+    padding: 0;
+    max-width: 560px;
+    list-style: none;
+    font-size: 14px;
+  }
+
+  .socials a {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr) auto;
+    gap: 16px;
+    padding: 14px 16px;
+    background: var(--color-surface);
+    text-decoration: none;
+  }
+
+  .social-label {
+    color: var(--color-muted);
+  }
+
+  .socials a:hover .social-label {
+    color: inherit;
+  }
+
+  .social-handle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    .hero-copy {
+      padding-bottom: 32px;
+    }
+
+    .portrait {
+      justify-self: start;
+      max-width: 320px;
+    }
+
+    .portrait img {
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 70%, transparent 100%);
+      -webkit-mask-composite: source-over;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 70%, transparent 100%);
+      mask-composite: add;
+    }
+
+    .portrait-bar {
+      left: 0;
+      bottom: 0;
+    }
+
+    .stack-cell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .socials a {
+      grid-template-columns: 80px minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+  }
+</style>

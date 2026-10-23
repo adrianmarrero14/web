@@ -1,0 +1,74 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Monogram from './Monogram.astro';
+import { languages, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const locales = Object.keys(languages) as Lang[];
+---
+
+<header class="site-header">
+  <a class="home" href={getRelativeLocaleUrl(lang, '')} aria-label={t('nav.home')}>
+    <Monogram size="28px" cursor="blink" />
+  </a>
+  <nav class="lang mono" aria-label={t('nav.language')}>
+    {
+      locales.map((l) => (
+        <a
+          href={getRelativeLocaleUrl(l, '')}
+          hreflang={l}
+          lang={l}
+          aria-current={l === lang ? 'page' : undefined}
+          title={languages[l]}
+        >
+          {l.toUpperCase()}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    border-bottom: var(--rule);
+  }
+
+  .home {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .home:hover {
+    color: var(--color-text);
+  }
+
+  .lang {
+    display: flex;
+    gap: 4px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+
+  .lang a {
+    padding: 6px 8px;
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+
+  .lang a:hover {
+    color: var(--accent);
+  }
+
+  .lang a[aria-current='page'] {
+    color: var(--color-text);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+</style>

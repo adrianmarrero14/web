@@ -1,0 +1,60 @@
+---
+/** A ruled section: numbered label column on the left, content on the right. */
+interface Props {
+  id: string;
+  index: string;
+  title: string;
+  note?: string;
+}
+const { id, index, title, note } = Astro.props;
+---
+
+<section class="section" id={id} aria-labelledby={`${id}-title`}>
+  <div class="label">
+    <span class="index mono accent">{index}</span>
+    <h2 id={`${id}-title`}>{title}</h2>
+    {note && <p class="note mono">{note}</p>}
+  </div>
+  <div class="content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 24px 40px;
+    padding: 56px 0;
+    border-bottom: var(--rule);
+  }
+
+  .label {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .index {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  .note {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 760px) {
+    .section {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 40px 0;
+    }
+  }
+</style>

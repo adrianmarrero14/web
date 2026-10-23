@@ -1,0 +1,26 @@
+---
+import { site, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const t = useTranslations(Astro.props.lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer mono">
+  <span>© {year} {site.name}</span>
+  <span>{t('footer.served')}</span>
+</footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 32px 0 48px;
+    font-size: 12px;
+    color: var(--color-muted);
+  }
+</style>
