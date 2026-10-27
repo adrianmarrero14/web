@@ -4,7 +4,7 @@ import profile from '../assets/profile.jpeg';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import Section from './Section.astro';
-import { site, stack, useTranslations, type Lang } from '../i18n/ui';
+import { projects, site, stack, useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -34,10 +34,31 @@ const t = useTranslations(lang);
       <div class="prose">
         <p>{t('about.p1')}</p>
         <p>{t('about.p2')}</p>
+        <p>{t('about.p3')}</p>
       </div>
     </Section>
 
-    <Section id="stack" index="02" title={t('stack.title')} note={t('stack.note')}>
+    <Section id="projects" index="02" title={t('projects.title')} note={t('projects.note')}>
+      <ul class="projects">
+        {
+          projects.map((p) => (
+            <li>
+              <a href={p.href}>
+                <span class="project-name">
+                  {p.name} <span class="accent" aria-hidden="true">↗</span>
+                </span>
+                <span class="project-body">{p.body[lang]}</span>
+                <span class="project-status mono">
+                  <span class="accent" aria-hidden="true">●</span> {p.status[lang]}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Section>
+
+    <Section id="stack" index="03" title={t('stack.title')} note={t('stack.note')}>
       <dl class="stack">
         {
           stack.map(({ group, items }) => (
@@ -52,15 +73,6 @@ const t = useTranslations(lang);
           ))
         }
       </dl>
-    </Section>
-
-    <Section id="studio" index="03" title={site.studio.name} note={t('studio.note')}>
-      <div class="prose">
-        <p>{t('studio.body')}</p>
-        <p>
-          <a class="arrow-link mono" href={site.studio.href}>{t('studio.link')} <span class="accent">→</span></a>
-        </p>
-      </div>
     </Section>
 
     <Section id="contact" index="04" title={t('contact.title')} note={t('contact.note')}>
@@ -193,8 +205,44 @@ const t = useTranslations(lang);
     line-height: 1.35;
   }
 
-  .arrow-link {
-    font-size: 15px;
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .projects a {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 8px 24px;
+    padding: 18px 20px;
+    background: var(--color-surface);
+    text-decoration: none;
+  }
+
+  .project-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+  .project-body {
+    color: var(--color-muted);
+  }
+
+  .projects a:hover .project-body {
+    color: var(--color-text);
+  }
+
+  .project-status {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+    white-space: nowrap;
   }
 
   .email {
@@ -270,7 +318,8 @@ const t = useTranslations(lang);
       bottom: 0;
     }
 
-    .stack-cell {
+    .stack-cell,
+    .projects a {
       grid-template-columns: minmax(0, 1fr);
     }
 
