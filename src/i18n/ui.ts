@@ -26,6 +26,15 @@ export const projects = [
     status: { en: 'indie studio', es: 'estudio indie' },
   },
   {
+    name: 'Linotipo',
+    href: 'https://github.com/adrianmarrero14/linotipo',
+    body: {
+      en: 'A daily newspaper written by an AI agent. One edition a day, every source cited, zero slop.',
+      es: 'Un periódico diario escrito por un agente de IA. Una edición al día, todas las fuentes citadas, cero relleno.',
+    },
+    status: { en: 'in development', es: 'en desarrollo' },
+  },
+  {
     name: 'Wabu',
     href: 'https://github.com/adrianmarrero14/wabu',
     body: {
@@ -42,15 +51,6 @@ export const projects = [
       es: 'La app de productividad definitiva. Diario, tareas y hábitos. Un monorepo para iOS, Android, web y API.',
     },
     status: { en: 'iOS in progress', es: 'iOS en marcha' },
-  },
-  {
-    name: 'Linotipo',
-    href: 'https://github.com/adrianmarrero14/linotipo',
-    body: {
-      en: 'A daily newspaper written by an AI agent. One edition a day, every source cited, zero slop.',
-      es: 'Un periódico diario escrito por un agente de IA. Una edición al día, todas las fuentes citadas, cero relleno.',
-    },
-    status: { en: 'in development', es: 'en desarrollo' },
   },
 ] as const;
 
