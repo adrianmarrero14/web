@@ -8,7 +8,7 @@ const t = useTranslations(Astro.props.lang);
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer mono">
+<footer class="site-footer mono" data-reveal>
   <span>© {year} {site.name}</span>
   <span>{t('footer.served')}</span>
 </footer>

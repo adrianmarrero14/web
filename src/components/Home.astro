@@ -19,19 +19,20 @@ const t = useTranslations(lang);
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="prompt mono"><span class="accent">$</span> whoami</p>
-        <h1>Adrián<br />Marrero</h1>
-        <p class="role">{t('hero.role')}</p>
+        <p class="prompt mono"><span class="accent">$</span> <span data-type="70">whoami</span></p>
+        <h1 data-type="55">Adrián<br />Marrero</h1>
+        <p class="role" data-type="24">{t('hero.role')}</p>
         <p class="lead">{t('hero.lead')}</p>
       </div>
       <div class="portrait">
         <Image src={profile} alt={t('hero.portrait')} width={400} height={400} loading="eager" />
         <span class="portrait-bar" aria-hidden="true"></span>
       </div>
+      <span class="rule" style="--rule-delay: 0.6s" aria-hidden="true"></span>
     </section>
 
     <Section id="about" index="01" title={t('about.title')} note={t('about.note')}>
-      <div class="prose">
+      <div class="prose" data-reveal style="--i: 1">
         <p>{t('about.p1')}</p>
         <p>{t('about.p2')}</p>
         <p>{t('about.p3')}</p>
@@ -41,11 +42,11 @@ const t = useTranslations(lang);
     <Section id="projects" index="02" title={t('projects.title')} note={t('projects.note')}>
       <ul class="projects">
         {
-          projects.map((p) => (
-            <li>
+          projects.map((p, i) => (
+            <li data-reveal style={`--i: ${i + 1}`}>
               <a href={p.href}>
                 <span class="project-name">
-                  {p.name} <span class="accent" aria-hidden="true">↗</span>
+                  {p.name} <span class="arrow accent" aria-hidden="true">↗</span>
                 </span>
                 <span class="project-body">{p.body[lang]}</span>
                 <span class="project-status mono">
@@ -61,8 +62,8 @@ const t = useTranslations(lang);
     <Section id="stack" index="03" title={t('stack.title')} note={t('stack.note')}>
       <dl class="stack">
         {
-          stack.map(({ group, items }) => (
-            <div class="stack-cell">
+          stack.map(({ group, items }, i) => (
+            <div class="stack-cell" data-reveal style={`--i: ${i + 1}`}>
               <dt class="mono">{group[lang]}</dt>
               <dd>
                 {items.map((item) => (
@@ -76,15 +77,17 @@ const t = useTranslations(lang);
     </Section>
 
     <Section id="contact" index="04" title={t('contact.title')} note={t('contact.note')}>
-      <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+      <div data-reveal style="--i: 1">
+        <a class="email" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
       <ul class="socials mono">
         {
-          site.socials.map((s) => (
-            <li>
+          site.socials.map((s, i) => (
+            <li data-reveal style={`--i: ${i + 2}`}>
               <a href={s.href} rel="me">
                 <span class="social-label">{s.label}</span>
                 <span class="social-handle">{s.handle}</span>
-                <span class="accent" aria-hidden="true">↗</span>
+                <span class="arrow accent" aria-hidden="true">↗</span>
               </a>
             </li>
           ))
@@ -96,14 +99,80 @@ const t = useTranslations(lang);
   <Footer lang={lang} />
 </div>
 
+<script>
+  // Type the hero's [data-type] lines one after another, like a terminal. The value is
+  // milliseconds per character. Screen readers get the full text from the start.
+  const targets = [...document.querySelectorAll<HTMLElement>('[data-type]')];
+
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  function splitChars(node: Node, chars: HTMLElement[]) {
+    for (const child of [...node.childNodes]) {
+      if (child.nodeType !== Node.TEXT_NODE) {
+        splitChars(child, chars);
+        continue;
+      }
+      const spans = [...(child.textContent ?? '')].map((c) => {
+        const span = document.createElement('span');
+        span.className = 'type-char';
+        span.textContent = c;
+        chars.push(span);
+        return span;
+      });
+      child.replaceWith(...spans);
+    }
+  }
+
+  async function type() {
+    const cursor = document.createElement('span');
+    cursor.className = 'type-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+
+    // Split everything up front so the whole hero keeps its final layout while typing.
+    const jobs = targets.map((el) => {
+      const original = [...el.childNodes].map((n) => n.cloneNode(true));
+      const copy = el.cloneNode(true) as HTMLElement;
+      copy.querySelectorAll('br').forEach((br) => br.replaceWith(' '));
+      const label = document.createElement('span');
+      label.className = 'visually-hidden';
+      label.textContent = copy.textContent;
+      const visual = document.createElement('span');
+      visual.setAttribute('aria-hidden', 'true');
+      visual.append(...el.childNodes);
+      const chars: HTMLElement[] = [];
+      splitChars(visual, chars);
+      el.append(label, visual);
+      el.dataset.typing = '';
+      return { el, original, chars, speed: Number(el.dataset.type) };
+    });
+
+    for (const [n, job] of jobs.entries()) {
+      job.chars[0].before(cursor);
+      await sleep(n === 0 ? 400 : 200);
+      for (const char of job.chars) {
+        char.classList.add('on');
+        char.after(cursor);
+        await sleep(job.speed);
+      }
+      // Back to the plain text, so kerning and selection behave as if nothing happened.
+      job.el.replaceChildren(...job.original);
+    }
+
+    jobs[jobs.length - 1].el.append(cursor);
+    cursor.classList.add('done');
+  }
+
+  if (document.documentElement.classList.contains('motion') && targets.length) type();
+</script>
+
 <style>
   .hero {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     align-items: end;
     gap: 40px;
     padding-top: clamp(48px, 8vw, 104px);
-    border-bottom: var(--rule);
   }
 
   .hero-copy {
@@ -232,6 +301,7 @@ const t = useTranslations(lang);
 
   .project-body {
     color: var(--color-muted);
+    transition: color 120ms ease;
   }
 
   .projects a:hover .project-body {
@@ -255,6 +325,13 @@ const t = useTranslations(lang);
     overflow-wrap: anywhere;
     text-decoration: none;
     box-shadow: inset 0 -0.08em 0 var(--accent);
+    transition:
+      color 120ms ease,
+      box-shadow 200ms var(--ease-out);
+  }
+
+  .email:hover {
+    box-shadow: inset 0 -0.16em 0 var(--accent);
   }
 
   .socials {
@@ -289,6 +366,62 @@ const t = useTranslations(lang);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* Hover: rows get an accent edge, arrows nudge toward where they lead. */
+  .projects a,
+  .socials a {
+    transition:
+      color 120ms ease,
+      box-shadow 200ms var(--ease-out);
+  }
+
+  .projects a:hover,
+  .socials a:hover {
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: transform 200ms var(--ease-out);
+  }
+
+  a:hover .arrow {
+    transform: translate(2px, -2px);
+  }
+
+  /* Hero entrance, timed against the typing in the script above (about 2.7s in total). */
+  :global(.motion) .lead {
+    animation: hero-rise 0.8s var(--ease-out) 2.2s both;
+  }
+
+  :global(.motion) .portrait img {
+    animation: portrait-in 1.6s var(--ease-out) 0.2s both;
+  }
+
+  :global(.motion) .portrait-bar {
+    transform-origin: left;
+    animation: bar-grow 0.6s var(--ease-out) 1.5s both;
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  @keyframes portrait-in {
+    from {
+      opacity: 0;
+      transform: scale(1.03);
+    }
+  }
+
+  @keyframes bar-grow {
+    from {
+      transform: scaleX(0);
+    }
   }
 
   @media (max-width: 760px) {
