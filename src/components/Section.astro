@@ -10,7 +10,7 @@ const { id, index, title, note } = Astro.props;
 ---
 
 <section class="section" id={id} aria-labelledby={`${id}-title`}>
-  <div class="label">
+  <div class="label" data-reveal>
     <span class="index mono accent">{index}</span>
     <h2 id={`${id}-title`}>{title}</h2>
     {note && <p class="note mono">{note}</p>}
@@ -18,15 +18,16 @@ const { id, index, title, note } = Astro.props;
   <div class="content">
     <slot />
   </div>
+  <span class="rule" aria-hidden="true"></span>
 </section>
 
 <style>
   .section {
+    position: relative;
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
     gap: 24px 40px;
     padding: 56px 0;
-    border-bottom: var(--rule);
   }
 
   .label {

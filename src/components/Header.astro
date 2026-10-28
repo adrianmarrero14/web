@@ -30,15 +30,16 @@ const locales = Object.keys(languages) as Lang[];
       ))
     }
   </nav>
+  <span class="rule" aria-hidden="true"></span>
 </header>
 
 <style>
   .site-header {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 28px 0;
-    border-bottom: var(--rule);
   }
 
   .home {

@@ -34,6 +34,10 @@ const ogLocale = { en: 'en_US', es: 'es_ES' }[lang];
     <meta name="color-scheme" content="dark" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      // Opt into motion before first paint, so animated content never flashes in its final state.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion');
+    </script>
     {
       alternates && (
         <>
@@ -55,5 +59,21 @@ const ogLocale = { en: 'en_US', es: 'es_ES' }[lang];
   </head>
   <body>
     <slot />
+    <script>
+      // Fade in [data-reveal] blocks and draw .rule lines as they scroll into view.
+      if (document.documentElement.classList.contains('motion')) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -6% 0px' },
+        );
+        document.querySelectorAll('[data-reveal], .rule').forEach((el) => observer.observe(el));
+      }
+    </script>
   </body>
 </html>
